@@ -175,7 +175,7 @@ public class TeamspeakBot extends TeamspeakBotMessages{
     public void grantAccess(int tsDbid, int clientId, int groupId, AccessStatusData accessStatus, boolean hasPublicChannelAccess){
         
         List<ServerGroup> serverGroups = getAPI().getServerGroupsByClientId(tsDbid);
-        boolean move = true;
+        boolean move = false;
         for(ServerGroup serverGroup : serverGroups){
             int serverGroupId = serverGroup.getId();
             switch(serverGroupId){
