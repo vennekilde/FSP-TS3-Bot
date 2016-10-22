@@ -10,8 +10,6 @@ import com.github.theholywaffle.teamspeak3.api.wrapper.ClientInfo;
 import com.github.theholywaffle.teamspeak3.api.wrapper.DatabaseClientInfo;
 import com.github.theholywaffle.teamspeak3.api.wrapper.Permission;
 import com.github.theholywaffle.teamspeak3.api.wrapper.ServerGroup;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.ResourceBundle;
 import org.slf4j.Logger;
@@ -177,6 +175,12 @@ public abstract class TSBotHelper extends TSAPIHelper{
                 break;
             case tempFspServerGroupId:
                 groupName = "Temp FSP";
+                break;
+            case linkedWorldServerGroupId:
+                groupName = "Linked World";
+                break;
+            case tempLinkedWorldServerGroupId:
+                groupName = "Temp Linked World";
                 break;
             case musicBotServerGroupId:
                 groupName = "Music Bot";
