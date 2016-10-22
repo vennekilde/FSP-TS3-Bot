@@ -79,16 +79,6 @@ public class TeamspeakBot extends TeamspeakBotMessages{
 
     
     public void updateUserRoles(int tsDbid){
-        //Default to true, as this avoid issues with giving wrongful permissions, however might not 
-        //give permissions to those who deserve it, if something went wrong
-        boolean hasPublicChannelAccess = true;
-        try {
-            hasPublicChannelAccess = hasRestrictedChannelAccess(tsDbid);
-            logger.info((isInShadowmodeForUser(tsDbid) ? "ShadowMode: " : "") + "Public Channel Access for user: "+tsDbid+": "+hasPublicChannelAccess);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-        
         DatabaseClientInfo databaseClientInfo = getAPI().getDatabaseClientInfo(tsDbid);
         if(databaseClientInfo == null){
             //Don't bother, user is not on
@@ -110,7 +100,8 @@ public class TeamspeakBot extends TeamspeakBotMessages{
     }
     
     public void updateUserRoles(int tsDbid, int clientId, AccessStatusData accessStatusData){
-        
+        //Default to true, as this avoid issues with giving wrongful permissions, however might not 
+        //give permissions to those who deserve it, if something went wrong
         boolean hasPublicChannelAccess = true;
         try {
             hasPublicChannelAccess = hasRestrictedChannelAccess(tsDbid);
@@ -186,7 +177,7 @@ public class TeamspeakBot extends TeamspeakBotMessages{
                 case linkedWorldServerGroupId:
                 case tempLinkedWorldServerGroupId:
                     if(groupId != serverGroupId){
-                        removeUserFromGroup(tsDbid, groupId, move);
+                        removeUserFromGroup(tsDbid, serverGroupId, move);
                     }
                     break;
             }
