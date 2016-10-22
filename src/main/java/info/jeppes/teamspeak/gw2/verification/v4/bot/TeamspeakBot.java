@@ -163,7 +163,6 @@ public class TeamspeakBot extends TeamspeakBotMessages{
                 case fspServerGroupId:
                 case tempFspServerGroupId:
                 case musicBotServerGroupId:
-                case commanderServerGroup:
                 case linkedWorldServerGroupId:
                 case tempLinkedWorldServerGroupId:
                     if(groupId != serverGroupId){
