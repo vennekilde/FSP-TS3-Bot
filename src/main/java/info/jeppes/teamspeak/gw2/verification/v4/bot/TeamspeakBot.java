@@ -100,24 +100,14 @@ public class TeamspeakBot extends TeamspeakBotMessages{
     }
     
     public void updateUserRoles(int tsDbid, int clientId, AccessStatusData accessStatusData){
-        //Default to true, as this avoid issues with giving wrongful permissions, however might not 
-        //give permissions to those who deserve it, if something went wrong
-        boolean hasPublicChannelAccess = true;
-        try {
-            hasPublicChannelAccess = hasRestrictedChannelAccess(tsDbid);
-            logger.info((isInShadowmodeForUser(tsDbid) ? "ShadowMode: " : "") + "Public Channel Access for user: "+tsDbid+": "+hasPublicChannelAccess);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-        
         switch(accessStatusData.getAccessStatus()){
             case ACCESS_GRANTED_HOME_WORLD:
                 if(!accessStatusData.isMusicBot()){
                     //Access is primary and not a music bot
-                    this.grantAccess(tsDbid, clientId, fspServerGroupId, accessStatusData, hasPublicChannelAccess);
+                    this.grantAccess(tsDbid, clientId, fspServerGroupId, accessStatusData);
                 } else {
                     //Access is granted trough another user and is a music bot
-                    this.grantAccess(tsDbid, clientId, musicBotServerGroupId, accessStatusData, hasPublicChannelAccess);
+                    this.grantAccess(tsDbid, clientId, musicBotServerGroupId, accessStatusData);
                 }
                 break;
             case ACCESS_GRANTED_HOME_WORLD_TEMPORARY:
@@ -134,10 +124,10 @@ public class TeamspeakBot extends TeamspeakBotMessages{
             case ACCESS_GRANTED_LINKED_WORLD:
                 if(!accessStatusData.isMusicBot()){
                     //Access is primary and not a music bot
-                    this.grantAccess(tsDbid, clientId, linkedWorldServerGroupId, accessStatusData, hasPublicChannelAccess);
+                    this.grantAccess(tsDbid, clientId, linkedWorldServerGroupId, accessStatusData);
                 } else {
                     //Access is granted trough another user and is a music bot
-                    this.grantAccess(tsDbid, clientId, musicBotServerGroupId, accessStatusData, hasPublicChannelAccess);
+                    this.grantAccess(tsDbid, clientId, musicBotServerGroupId, accessStatusData);
                 }
                 break; 
             case ACCESS_GRANTED_LIMKED_WORLD_TEMPORARY:
@@ -163,7 +153,7 @@ public class TeamspeakBot extends TeamspeakBotMessages{
         }
     }
     
-    public void grantAccess(int tsDbid, int clientId, int groupId, AccessStatusData accessStatus, boolean hasPublicChannelAccess){
+    public void grantAccess(int tsDbid, int clientId, int groupId, AccessStatusData accessStatus){
         
         List<ServerGroup> serverGroups = getAPI().getServerGroupsByClientId(tsDbid);
         boolean move = false;
@@ -181,6 +171,16 @@ public class TeamspeakBot extends TeamspeakBotMessages{
                     }
                     break;
             }
+        }
+        
+        //Default to true, as this avoid issues with giving wrongful permissions, however might not 
+        //give permissions to those who deserve it, if something went wrong
+        boolean hasPublicChannelAccess = true;
+        try {
+            hasPublicChannelAccess = hasRestrictedChannelAccess(tsDbid);
+            logger.info((isInShadowmodeForUser(tsDbid) ? "ShadowMode: " : "") + "Public Channel Access for user: "+tsDbid+": "+hasPublicChannelAccess);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
         }
         
         boolean shouldAddGroup = true;
