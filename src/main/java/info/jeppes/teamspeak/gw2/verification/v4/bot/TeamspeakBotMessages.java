@@ -6,6 +6,7 @@
 package info.jeppes.teamspeak.gw2.verification.v4.bot;
 
 import com.github.theholywaffle.teamspeak3.api.wrapper.ClientInfo;
+import info.jeppes.teamspeak.gw2.verification.v4.bot.utils.TimeUtils;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -40,11 +41,16 @@ public class TeamspeakBotMessages extends TeamspeakEventListener{
     public void sendVerifyMessageCheckAccess(int clientId, int tsDbid, String displayName, boolean hideIfVerified, AccessStatusData accessStatusData){
         switch(accessStatusData.getAccessStatus()){
             case ACCESS_GRANTED_HOME_WORLD:
-            case ACCESS_GRANTED_HOME_WORLD_TEMPORARY:
             case ACCESS_GRANTED_LINKED_WORLD:
-            case ACCESS_GRANTED_LIMKED_WORLD_TEMPORARY:
                 if(!hideIfVerified){
                     sendAlreadyVerifiedMessage(tsDbid, clientId);
+                }
+                break;
+            case ACCESS_GRANTED_HOME_WORLD_TEMPORARY:
+            case ACCESS_GRANTED_LIMKED_WORLD_TEMPORARY:
+                if(!hideIfVerified){
+                    sendCurrentAccessTypeMessage(clientId, tsDbid, accessStatusData);
+                    sendVerifyMessage(clientId, tsDbid, displayName);
                 }
                 break;
             case ACCESS_DENIED_ACCOUNT_NOT_LINKED:
@@ -62,6 +68,24 @@ public class TeamspeakBotMessages extends TeamspeakEventListener{
                 sendVerificationBannedMessage(tsDbid, clientId, accessStatusData.getBanReason());
                 break;
         }
+    }
+    
+    public void sendCurrentAccessTypeMessage(int clientId, int tsDbid, AccessStatusData accessStatusData){
+        String message = 
+            "\n\n[color=blue][b]Your current access level[/b][/color]\n" +
+            "[color=#000000][b]"+accessStatusData.getAccessStatus().name()+"[/b][/color]\n\n";
+        
+        if(accessStatusData.getExpires() > 0){
+            message += "Expires in "+TimeUtils.getTimeWWDDHHMMSSStringShort(accessStatusData.getExpires())+"\n\n";
+        }
+        if(accessStatusData.getAccessStatus() == AccessStatus.ACCESS_DENIED_BANNED && accessStatusData.getBanReason() != null && !accessStatusData.getBanReason().isEmpty()){
+            message += "Ban reason: "+accessStatusData.getBanReason()+"\n";
+        }
+        if(accessStatusData.isMusicBot()){
+            message += "Current user is designated as a Music Bot. Primary database user id: "+accessStatusData.getMusicBotOwner()+"\n\n";
+        }
+        sendPrivateMessage(tsDbid, clientId, message);
+        logger.info((isInShadowmodeForUser(tsDbid) ? "ShadowMode: " : "") + "Sent Current Access Type message to user: "+tsDbid);
     }
     
     public void sendVerifyMessage(int clientId, int tsDbid, String displayName){
