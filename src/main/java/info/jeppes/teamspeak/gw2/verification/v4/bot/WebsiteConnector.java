@@ -41,7 +41,7 @@ public class WebsiteConnector {
             for(SimpleEntry<String,String> entry : userIds){
                 userIdsString.append(entry.getKey());
                 if(entry.getValue() != null){
-                    userIdsString.append(":").append(entry.getValue());
+                    userIdsString.append(":").append(entry.getValue().replace(",", " "));
                 }
             }
             String url = baseRESTURL + STATUS_BASE_URL + "&enum-ids&user-ids=" + URLEncoder.encode(userIdsString.toString(), "UTF-8");
