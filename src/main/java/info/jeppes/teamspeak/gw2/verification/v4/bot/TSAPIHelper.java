@@ -297,7 +297,7 @@ public abstract class TSAPIHelper implements TS3Listener, Destroyable{
     }
     
     private void initTSConnection(){
-        api.selectVirtualServerById(1);
+        api.selectVirtualServerById(Integer.parseInt(config.getString("ts3_virtual_server_id")));
         String baseNickName = "Far Shiverpeaks Bot";
         boolean success = api.setNickname(baseNickName);
         logger.info("setNickname success: "+success);
