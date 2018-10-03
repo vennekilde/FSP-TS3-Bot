@@ -3,7 +3,7 @@
 # and open the template in the editor.
 FROM openjdk:8
 
-ENV VERSION 4.0.2
+ENV VERSION 4.0.3
 
 ADD https://github.com/vennekilde/FSP-TS3-Bot/releases/download/${VERSION}/TeamspeakServerLink.jar /app/TeamspeakServerLink.jar
 
