@@ -9,6 +9,6 @@ ADD https://github.com/vennekilde/FSP-TS3-Bot/releases/download/${VERSION}/Teams
 
 COPY ts3bot-entrypoint.sh /app/ts3bot-entrypoint.sh
 
-RUN cd /app
 RUN chmod +x /app/ts3bot-entrypoint.sh
+WORKDIR /app
 ENTRYPOINT ["/app/ts3bot-entrypoint.sh"]
