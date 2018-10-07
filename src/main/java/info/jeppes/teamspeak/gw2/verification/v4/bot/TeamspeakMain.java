@@ -6,6 +6,7 @@
 package info.jeppes.teamspeak.gw2.verification.v4.bot;
 
 import com.sun.net.httpserver.HttpServer;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -35,12 +36,14 @@ public class TeamspeakMain {
      */
     public static void main(String[] args) throws IOException, DestroyFailedException {
         String configPathEnv = System.getenv("BOT_CONFIG_PATH");
+        File configFile;
         if (configPathEnv != null) {
-            try (FileInputStream fis = new FileInputStream(configPathEnv)) {
-                config = new PropertyResourceBundle(fis);
-            }
+            configFile = new File(configPathEnv);
         } else {
-            config = ResourceBundle.getBundle("config");
+            configFile = new File(System.getProperty("user.dir"), "config.properties");
+        }
+        try (FileInputStream fis = new FileInputStream(configFile)) {
+            config = new PropertyResourceBundle(fis);
         }
         //Initiate bot instance
         createTempeakBot();
