@@ -22,3 +22,4 @@
 # Mac filesystem dust
 /.DS_Store
 /src/main/resources/config.properties
+config\.properties

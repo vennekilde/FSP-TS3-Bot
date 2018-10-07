@@ -61,6 +61,10 @@ public class TeamspeakMain {
         return bot;
     }
 
+    public static ResourceBundle getConfig() {
+        return config;
+    }
+
     public static void destroyTeamspeakBot() throws DestroyFailedException {
         if (bot != null) {
             logger.info("Destroying Teamspeak bot instance");
